@@ -138,7 +138,7 @@ class Device(metaclass=DeviceGroupMeta):
         self.debug = debug
         self.lazy_discover = lazy_discover
 
-        self._timeout = 5
+        self._timeout = 0.5
         self._discovered = False
         self._device_ts = None  # type: datetime.datetime
         self.__id = start_id
@@ -181,7 +181,7 @@ class Device(metaclass=DeviceGroupMeta):
         an unicast packet.
 
         :param str addr: Target IP address"""
-        timeout = 5
+        timeout = 0.5
         is_broadcast = addr is None
         seen_addrs = []  # type: List[str]
         if is_broadcast:
@@ -221,7 +221,7 @@ class Device(metaclass=DeviceGroupMeta):
                 _LOGGER.warning("error while reading discover results: %s", ex)
                 break
 
-    def send(self, command: str, parameters: Any = None, retry_count=3) -> Any:
+    def send(self, command: str, parameters: Any = None, retry_count=20) -> Any:
         """Build and send the given command.
         Note that this will implicitly call :func:`do_discover` to do a handshake,
         and will re-try in case of errors while incrementing the `_id` by 100.
